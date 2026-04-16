@@ -2,16 +2,15 @@
 
 import { useRouter } from 'next/navigation';
 import { useRole } from '@/contexts/RoleContext';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Shield, Users, School, Phone, Mail, GraduationCap, Heart, BookOpen, Award, CheckCircle2, ArrowRight } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Phone, Mail, GraduationCap, Heart, BookOpen, Award, CheckCircle2, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 export default function LandingPage() {
   const router = useRouter();
-  const { setRole, currentRole } = useRole();
-  const [showLoginModal, setShowLoginModal] = useState(false);
+  const { currentRole } = useRole();
 
   // Redirect if already logged in
   useEffect(() => {
@@ -20,33 +19,6 @@ export default function LandingPage() {
       router.push(redirectPath);
     }
   }, [currentRole, router]);
-
-  const handleRoleSelect = (role: 'admin' | 'staff' | 'school') => {
-    setRole(role);
-    const redirectPath = role === 'school' ? '/portal/dashboard' : '/dashboard';
-    router.push(redirectPath);
-  };
-
-  const roles = [
-    {
-      value: 'admin' as const,
-      label: '1Ummah Admin',
-      description: 'Full access to all modules and settings',
-      icon: Shield,
-    },
-    {
-      value: 'staff' as const,
-      label: '1Ummah Staff',
-      description: 'View and manage students, schools, and fees',
-      icon: Users,
-    },
-    {
-      value: 'school' as const,
-      label: 'School Portal',
-      description: 'Access school portal and submit payment requests',
-      icon: School,
-    },
-  ];
 
   const stats = [
     { number: '500+', label: 'Students Supported' },
@@ -139,7 +111,7 @@ export default function LandingPage() {
 
             {/* Login Button */}
             <Button
-              onClick={() => setShowLoginModal(true)}
+              onClick={() => router.push('/login')}
               className="bg-white text-brand hover:bg-brand-light hover:text-brand font-semibold shadow-md"
               size="lg"
             >
@@ -177,7 +149,7 @@ export default function LandingPage() {
                 <Button
                   size="lg"
                   className="bg-brand hover:bg-brand/90 text-white font-semibold text-lg h-14 px-8 shadow-lg"
-                  onClick={() => setShowLoginModal(true)}
+                  onClick={() => router.push('/login')}
                 >
                   Access Portal
                   <ArrowRight className="ml-2 h-5 w-5" />
@@ -306,7 +278,7 @@ export default function LandingPage() {
               <Button
                 size="lg"
                 className="bg-white text-brand hover:bg-brand-light font-semibold text-lg h-14 px-8"
-                onClick={() => setShowLoginModal(true)}
+                onClick={() => router.push('/login')}
               >
                 Access Portal
               </Button>
@@ -373,7 +345,7 @@ export default function LandingPage() {
                 <a href="#about" className="block hover:text-white transition-colors">About SILP</a>
                 <a href="#features" className="block hover:text-white transition-colors">Features</a>
                 <a href="#benefits" className="block hover:text-white transition-colors">Benefits</a>
-                <button onClick={() => setShowLoginModal(true)} className="block hover:text-white transition-colors">Portal Login</button>
+                <button onClick={() => router.push('/login')} className="block hover:text-white transition-colors">Portal Login</button>
               </div>
             </div>
           </div>
@@ -383,82 +355,6 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
-
-      {/* Login Modal */}
-      {showLoginModal && (
-        <div
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
-          onClick={() => setShowLoginModal(false)}
-        >
-          <div
-            className="bg-white rounded-2xl max-w-5xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="p-8 space-y-8">
-              {/* Modal Header */}
-              <div className="text-center space-y-3">
-                <div className="flex justify-center mb-4">
-                  <div className="relative h-20 w-20 bg-brand/10 rounded-full p-3">
-                    <Image
-                      src="/1Ummah-Web-logo.png"
-                      alt="1Ummah Logo"
-                      fill
-                      className="object-contain p-2"
-                      sizes="80px"
-                    />
-                  </div>
-                </div>
-                <h2 className="text-4xl font-bold text-brand">SILP Management Platform</h2>
-                <p className="text-gray-600 text-lg">Select your role to access the platform</p>
-              </div>
-
-              {/* Role selection cards */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {roles.map((role) => {
-                  const Icon = role.icon;
-                  return (
-                    <Card
-                      key={role.value}
-                      className="hover:shadow-xl hover:border-brand transition-all cursor-pointer group border-2"
-                      onClick={() => handleRoleSelect(role.value)}
-                    >
-                      <CardHeader className="text-center space-y-4">
-                        <div className="mx-auto rounded-2xl p-5 w-fit bg-brand-light group-hover:bg-brand transition-colors">
-                          <Icon className="h-10 w-10 text-brand group-hover:text-white transition-colors" />
-                        </div>
-                        <CardTitle className="text-xl text-brand">{role.label}</CardTitle>
-                        <CardDescription className="min-h-[48px] text-gray-600">
-                          {role.description}
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <Button
-                          className="w-full bg-brand hover:bg-brand/90 text-white h-12 text-base font-semibold"
-                        >
-                          Enter Portal
-                          <ArrowRight className="ml-2 h-4 w-4" />
-                        </Button>
-                      </CardContent>
-                    </Card>
-                  );
-                })}
-              </div>
-
-              {/* Close button */}
-              <div className="text-center pt-4">
-                <Button
-                  variant="ghost"
-                  onClick={() => setShowLoginModal(false)}
-                  className="text-gray-500 hover:text-brand text-base"
-                  size="lg"
-                >
-                  Cancel
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
