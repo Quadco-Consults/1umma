@@ -18,19 +18,26 @@ export default function ProfilePage() {
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const fullName = currentUser ? `${currentUser.firstName} ${currentUser.lastName}` : '';
-
   const [formData, setFormData] = useState({
-    name: fullName,
+    name: currentUser?.name || '',
     email: currentUser?.email || '',
-    phone: currentUser?.phone || '+234 803 123 4567',
+    phone: '+234 803 123 4567',
     address: '123 Main Street, Lagos, Nigeria',
     bio: 'Passionate about making a difference in education.',
   });
 
-  const userInitials = currentUser
-    ? `${currentUser.firstName[0]}${currentUser.lastName[0]}`.toUpperCase()
+  const userInitials = currentUser?.name
+    ? currentUser.name
+        .split(' ')
+        .map((n) => n[0])
+        .join('')
+        .toUpperCase()
     : 'AU';
+
+  const getRoleName = (role: string | undefined) => {
+    if (!role) return 'User';
+    return role.charAt(0).toUpperCase() + role.slice(1);
+  };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -73,9 +80,9 @@ export default function ProfilePage() {
 
   const handleCancel = () => {
     setFormData({
-      name: fullName,
+      name: currentUser?.name || '',
       email: currentUser?.email || '',
-      phone: currentUser?.phone || '+234 803 123 4567',
+      phone: '+234 803 123 4567',
       address: '123 Main Street, Lagos, Nigeria',
       bio: 'Passionate about making a difference in education.',
     });
@@ -111,7 +118,7 @@ export default function ProfilePage() {
               <div className="relative">
                 <Avatar className="h-24 w-24 border-4 border-brand/20">
                   {profileImage ? (
-                    <AvatarImage src={profileImage} alt={fullName} />
+                    <AvatarImage src={profileImage} alt={formData.name} />
                   ) : null}
                   <AvatarFallback className="bg-brand text-white text-2xl font-bold">
                     {userInitials}
@@ -134,9 +141,9 @@ export default function ProfilePage() {
                 />
               </div>
               <div className="flex-1">
-                <CardTitle className="text-brand text-2xl">{fullName}</CardTitle>
+                <CardTitle className="text-brand text-2xl">{formData.name}</CardTitle>
                 <CardDescription className="text-base mt-1">
-                  {currentUser?.roleName} • Member since January 2025
+                  {getRoleName(currentUser?.role)} • Member since January 2025
                 </CardDescription>
                 {profileImage && (
                   <div className="mt-2">
@@ -219,7 +226,7 @@ export default function ProfilePage() {
                   <Label htmlFor="role">Role</Label>
                   <div className="flex items-center gap-2 text-sm p-2 border rounded-md bg-gray-50">
                     <Briefcase className="h-4 w-4 text-muted-foreground" />
-                    {currentUser?.roleName}
+                    {getRoleName(currentUser?.role)}
                   </div>
                 </div>
               </div>

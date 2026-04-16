@@ -1,12 +1,12 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { UserRole, User } from '@/lib/types';
+import { UserRole, AuthUser } from '@/lib/types';
 import usersData from '@/mock-data/users.json';
 
 interface RoleContextType {
   currentRole: UserRole | null;
-  currentUser: User | null;
+  currentUser: AuthUser | null;
   setRole: (role: UserRole) => void;
   logout: () => void;
   isAdmin: boolean;
@@ -18,20 +18,20 @@ const RoleContext = createContext<RoleContextType | undefined>(undefined);
 
 export function RoleProvider({ children }: { children: React.ReactNode }) {
   const [currentRole, setCurrentRole] = useState<UserRole | null>(null);
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
 
   // Load role from localStorage on mount
   useEffect(() => {
     const savedRole = localStorage.getItem('userRole') as UserRole | null;
     if (savedRole) {
-      const user = usersData.find((u) => u.role === savedRole) as User;
+      const user = usersData.find((u) => u.role === savedRole) as AuthUser;
       setCurrentRole(savedRole);
       setCurrentUser(user || null);
     }
   }, []);
 
   const setRole = (role: UserRole) => {
-    const user = usersData.find((u) => u.role === role) as User;
+    const user = usersData.find((u) => u.role === role) as AuthUser;
     setCurrentRole(role);
     setCurrentUser(user || null);
     localStorage.setItem('userRole', role);

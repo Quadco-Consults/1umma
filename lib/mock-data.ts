@@ -3,13 +3,13 @@ import schoolsData from '@/mock-data/schools.json';
 import feesData from '@/mock-data/fees.json';
 import paymentsData from '@/mock-data/payments.json';
 import usersData from '@/mock-data/users.json';
-import type { Student, School, FeeRecord, PaymentRequest, User } from './types';
+import type { Student, School, FeeRecord, PaymentRequest, AuthUser } from './types';
 
 export const students = studentsData as Student[];
 export const schools = schoolsData as School[];
 export const fees = feesData as FeeRecord[];
 export const payments = paymentsData as PaymentRequest[];
-export const users = usersData as User[];
+export const users = usersData as AuthUser[];
 
 // Utility functions
 export function getStudentById(id: string): Student | undefined {
