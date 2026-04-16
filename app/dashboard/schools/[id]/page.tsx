@@ -51,7 +51,6 @@ export default function SchoolProfilePage() {
     region: school?.region || '',
     contactName: school?.contactName || '',
     contactPhone: school?.contactPhone || '',
-    contactEmail: school?.contactEmail || '',
   });
   const [feeStructure, setFeeStructure] = useState(school?.feeStructure || []);
 
@@ -71,7 +70,6 @@ export default function SchoolProfilePage() {
       region: school?.region || '',
       contactName: school?.contactName || '',
       contactPhone: school?.contactPhone || '',
-      contactEmail: school?.contactEmail || '',
     });
     setIsEditing(false);
   };
@@ -226,10 +224,6 @@ export default function SchoolProfilePage() {
                       {school.contactPhone} ({school.contactName})
                     </div>
                     <div className="flex items-center gap-2 text-muted-foreground">
-                      <Mail className="h-4 w-4" />
-                      {school.contactEmail}
-                    </div>
-                    <div className="flex items-center gap-2 text-muted-foreground">
                       <Calendar className="h-4 w-4" />
                       Enrolled in SILP: {formatDate(school.enrolledDate)}
                     </div>
@@ -317,7 +311,7 @@ export default function SchoolProfilePage() {
                     <Label htmlFor="state">State *</Label>
                     <Select
                       value={formData.state}
-                      onValueChange={(value) => setFormData({ ...formData, state: value })}
+                      onValueChange={(value) => setFormData({ ...formData, state: value || '' })}
                     >
                       <SelectTrigger className="border-brand/30 focus:border-brand">
                         <SelectValue placeholder="Select state" />
@@ -336,7 +330,7 @@ export default function SchoolProfilePage() {
                     <Label htmlFor="region">Region *</Label>
                     <Select
                       value={formData.region}
-                      onValueChange={(value) => setFormData({ ...formData, region: value })}
+                      onValueChange={(value) => setFormData({ ...formData, region: value || '' })}
                     >
                       <SelectTrigger className="border-brand/30 focus:border-brand">
                         <SelectValue placeholder="Select region" />
@@ -360,18 +354,6 @@ export default function SchoolProfilePage() {
                       onChange={(e) => setFormData({ ...formData, contactPhone: e.target.value })}
                       className="border-brand/30 focus:border-brand"
                       placeholder="+234 XXX XXX XXXX"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="contactEmail">Contact Email *</Label>
-                    <Input
-                      id="contactEmail"
-                      type="email"
-                      value={formData.contactEmail}
-                      onChange={(e) => setFormData({ ...formData, contactEmail: e.target.value })}
-                      className="border-brand/30 focus:border-brand"
-                      placeholder="email@example.com"
                     />
                   </div>
 

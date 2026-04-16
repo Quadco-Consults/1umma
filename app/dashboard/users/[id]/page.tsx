@@ -221,7 +221,7 @@ export default function UserDetailPage({ params }: { params: { id: string } }) {
                     {isEditing ? (
                       <Select
                         value={formData.roleId}
-                        onValueChange={(value) => setFormData({ ...formData, roleId: value })}
+                        onValueChange={(value) => setFormData({ ...formData, roleId: value || '' })}
                       >
                         <SelectTrigger className="border-brand/30 focus:border-brand">
                           <SelectValue />

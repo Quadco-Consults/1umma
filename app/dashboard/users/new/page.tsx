@@ -143,7 +143,7 @@ export default function NewUserPage() {
                     <Label htmlFor="roleId">User Role *</Label>
                     <Select
                       value={formData.roleId}
-                      onValueChange={(value) => setFormData({ ...formData, roleId: value })}
+                      onValueChange={(value) => setFormData({ ...formData, roleId: value || '' })}
                       required
                     >
                       <SelectTrigger className="border-brand/30 focus:border-brand">
@@ -175,7 +175,7 @@ export default function NewUserPage() {
                     <Label htmlFor="status">Account Status *</Label>
                     <Select
                       value={formData.status}
-                      onValueChange={(value) => setFormData({ ...formData, status: value as UserStatus })}
+                      onValueChange={(value) => setFormData({ ...formData, status: (value || 'Active') as UserStatus })}
                       required
                     >
                       <SelectTrigger className="border-brand/30 focus:border-brand">
@@ -210,7 +210,7 @@ export default function NewUserPage() {
                     <Label htmlFor="schoolId">Assigned School *</Label>
                     <Select
                       value={formData.schoolId}
-                      onValueChange={(value) => setFormData({ ...formData, schoolId: value })}
+                      onValueChange={(value) => setFormData({ ...formData, schoolId: value || '' })}
                       required={showSchoolField}
                     >
                       <SelectTrigger className="border-brand/30 focus:border-brand">

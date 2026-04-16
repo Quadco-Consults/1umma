@@ -1,6 +1,23 @@
 // User roles
 export type UserRole = 'admin' | 'staff' | 'school';
 
+// Auth user (from users.json - used for role switching)
+export interface AuthUser {
+  id: string;
+  role: UserRole;
+  name: string;
+  email: string;
+  schoolId?: string;
+  schoolName?: string;
+  permissions: {
+    students: string[];
+    schools: string[];
+    fees: string[];
+    payments: string[];
+    reports: string[];
+  };
+}
+
 // Student types
 export type StudentStatus = 'Active' | 'Graduated' | 'Exited';
 export type VulnerabilityStatus = 'Orphan' | 'IDP' | 'Less Privileged';

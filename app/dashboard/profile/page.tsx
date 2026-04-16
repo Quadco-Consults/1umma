@@ -17,20 +17,19 @@ export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const fullName = currentUser ? `${currentUser.firstName} ${currentUser.lastName}` : '';
+
   const [formData, setFormData] = useState({
-    name: currentUser?.name || '',
+    name: fullName,
     email: currentUser?.email || '',
-    phone: '+234 803 123 4567',
+    phone: currentUser?.phone || '+234 803 123 4567',
     address: '123 Main Street, Lagos, Nigeria',
     bio: 'Passionate about making a difference in education.',
   });
 
-  const userInitials = currentUser?.name
-    ? currentUser.name
-        .split(' ')
-        .map((n) => n[0])
-        .join('')
-        .toUpperCase()
+  const userInitials = currentUser
+    ? `${currentUser.firstName[0]}${currentUser.lastName[0]}`.toUpperCase()
     : 'AU';
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,9 +73,9 @@ export default function ProfilePage() {
 
   const handleCancel = () => {
     setFormData({
-      name: currentUser?.name || '',
+      name: fullName,
       email: currentUser?.email || '',
-      phone: '+234 803 123 4567',
+      phone: currentUser?.phone || '+234 803 123 4567',
       address: '123 Main Street, Lagos, Nigeria',
       bio: 'Passionate about making a difference in education.',
     });
@@ -112,7 +111,7 @@ export default function ProfilePage() {
               <div className="relative">
                 <Avatar className="h-24 w-24 border-4 border-brand/20">
                   {profileImage ? (
-                    <AvatarImage src={profileImage} alt={currentUser?.name} />
+                    <AvatarImage src={profileImage} alt={fullName} />
                   ) : null}
                   <AvatarFallback className="bg-brand text-white text-2xl font-bold">
                     {userInitials}
@@ -135,9 +134,9 @@ export default function ProfilePage() {
                 />
               </div>
               <div className="flex-1">
-                <CardTitle className="text-brand text-2xl">{currentUser?.name}</CardTitle>
+                <CardTitle className="text-brand text-2xl">{fullName}</CardTitle>
                 <CardDescription className="text-base mt-1">
-                  {currentUser?.role} • Member since January 2025
+                  {currentUser?.roleName} • Member since January 2025
                 </CardDescription>
                 {profileImage && (
                   <div className="mt-2">
@@ -220,7 +219,7 @@ export default function ProfilePage() {
                   <Label htmlFor="role">Role</Label>
                   <div className="flex items-center gap-2 text-sm p-2 border rounded-md bg-gray-50">
                     <Briefcase className="h-4 w-4 text-muted-foreground" />
-                    {currentUser?.role}
+                    {currentUser?.roleName}
                   </div>
                 </div>
               </div>

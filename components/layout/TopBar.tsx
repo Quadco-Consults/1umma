@@ -18,19 +18,15 @@ interface TopBarProps {
 }
 
 export function TopBar({ onMenuClick }: TopBarProps) {
-  const { currentUser, setRole } = useRole();
+  const { currentUser, logout } = useRole();
   const router = useRouter();
 
-  const userInitials = currentUser?.name
-    ? currentUser.name
-        .split(' ')
-        .map((n) => n[0])
-        .join('')
-        .toUpperCase()
+  const userInitials = currentUser
+    ? `${currentUser.firstName[0]}${currentUser.lastName[0]}`.toUpperCase()
     : 'AU';
 
   const handleSignOut = () => {
-    setRole(null);
+    logout();
     router.push('/');
   };
 
@@ -76,7 +72,7 @@ export function TopBar({ onMenuClick }: TopBarProps) {
               <div className="px-2 py-2 font-normal">
                 <div className="flex flex-col space-y-1">
                   <p className="text-sm font-medium leading-none text-brand">
-                    {currentUser?.name || '1Ummah Admin'}
+                    {currentUser ? `${currentUser.firstName} ${currentUser.lastName}` : '1Ummah Admin'}
                   </p>
                   <p className="text-xs leading-none text-muted-foreground">
                     {currentUser?.email || 'admin@1ummahng.org'}

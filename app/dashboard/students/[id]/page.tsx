@@ -390,7 +390,7 @@ export default function StudentProfilePage() {
                   <div className="grid md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="category">Document Category *</Label>
-                      <Select value={uploadCategory} onValueChange={setUploadCategory} required>
+                      <Select value={uploadCategory} onValueChange={(value) => setUploadCategory(value || '')} required>
                         <SelectTrigger className="border-brand/30 focus:border-brand">
                           <SelectValue placeholder="Select category" />
                         </SelectTrigger>

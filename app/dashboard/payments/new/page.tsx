@@ -171,7 +171,7 @@ export default function NewPaymentRequestPage() {
                   <Label htmlFor="school">School *</Label>
                   <Select
                     value={formData.schoolId}
-                    onValueChange={(value) => setFormData({ ...formData, schoolId: value })}
+                    onValueChange={(value) => setFormData({ ...formData, schoolId: value || '' })}
                     required
                   >
                     <SelectTrigger className="border-brand/30 focus:border-brand">
@@ -191,7 +191,7 @@ export default function NewPaymentRequestPage() {
                   <Label htmlFor="term">Term *</Label>
                   <Select
                     value={formData.term}
-                    onValueChange={(value) => setFormData({ ...formData, term: value })}
+                    onValueChange={(value) => setFormData({ ...formData, term: value || '' })}
                     required
                   >
                     <SelectTrigger className="border-brand/30 focus:border-brand">
@@ -209,7 +209,7 @@ export default function NewPaymentRequestPage() {
                   <Label htmlFor="academicYear">Academic Year *</Label>
                   <Select
                     value={formData.academicYear}
-                    onValueChange={(value) => setFormData({ ...formData, academicYear: value })}
+                    onValueChange={(value) => setFormData({ ...formData, academicYear: value || '' })}
                     required
                   >
                     <SelectTrigger className="border-brand/30 focus:border-brand">

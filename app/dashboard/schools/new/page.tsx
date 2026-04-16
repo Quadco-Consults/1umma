@@ -134,7 +134,7 @@ export default function NewSchoolPage() {
                     <Label htmlFor="state">State *</Label>
                     <Select
                       value={formData.state}
-                      onValueChange={(value) => setFormData({ ...formData, state: value })}
+                      onValueChange={(value) => setFormData({ ...formData, state: value || '' })}
                       required
                     >
                       <SelectTrigger className="border-brand/30 focus:border-brand">
@@ -154,7 +154,7 @@ export default function NewSchoolPage() {
                     <Label htmlFor="region">Region *</Label>
                     <Select
                       value={formData.region}
-                      onValueChange={(value) => setFormData({ ...formData, region: value })}
+                      onValueChange={(value) => setFormData({ ...formData, region: value || '' })}
                       required
                     >
                       <SelectTrigger className="border-brand/30 focus:border-brand">

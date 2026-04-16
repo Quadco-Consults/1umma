@@ -157,7 +157,7 @@ export default function NewStudentPage() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="gender" className="text-brand">Gender *</Label>
-                  <Select value={formData.gender} onValueChange={(value) => handleChange('gender', value)}>
+                  <Select value={formData.gender} onValueChange={(value) => handleChange('gender', value || '')}>
                     <SelectTrigger className="border-brand/30 focus:border-brand">
                       <SelectValue placeholder="Select gender" />
                     </SelectTrigger>
@@ -188,7 +188,7 @@ export default function NewStudentPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="state" className="text-brand">State *</Label>
-                  <Select value={formData.state} onValueChange={(value) => handleChange('state', value)}>
+                  <Select value={formData.state} onValueChange={(value) => handleChange('state', value || '')}>
                     <SelectTrigger className="border-brand/30 focus:border-brand">
                       <SelectValue placeholder="Select state" />
                     </SelectTrigger>
@@ -267,7 +267,7 @@ export default function NewStudentPage() {
 
               <div className="space-y-2">
                 <Label htmlFor="guardianRelation" className="text-brand">Relationship *</Label>
-                <Select value={formData.guardianRelation} onValueChange={(value) => handleChange('guardianRelation', value)}>
+                <Select value={formData.guardianRelation} onValueChange={(value) => handleChange('guardianRelation', value || '')}>
                   <SelectTrigger className="border-brand/30 focus:border-brand">
                     <SelectValue placeholder="Select relationship" />
                   </SelectTrigger>
@@ -299,7 +299,7 @@ export default function NewStudentPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="schoolId" className="text-brand">School *</Label>
-                  <Select value={formData.schoolId} onValueChange={(value) => handleChange('schoolId', value)}>
+                  <Select value={formData.schoolId} onValueChange={(value) => handleChange('schoolId', value || '')}>
                     <SelectTrigger className="border-brand/30 focus:border-brand">
                       <SelectValue placeholder="Select school" />
                     </SelectTrigger>
@@ -312,7 +312,7 @@ export default function NewStudentPage() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="class" className="text-brand">Class *</Label>
-                  <Select value={formData.class} onValueChange={(value) => handleChange('class', value)}>
+                  <Select value={formData.class} onValueChange={(value) => handleChange('class', value || '')}>
                     <SelectTrigger className="border-brand/30 focus:border-brand">
                       <SelectValue placeholder="Select class" />
                     </SelectTrigger>
