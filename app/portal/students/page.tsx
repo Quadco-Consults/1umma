@@ -6,7 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { StatusBadge } from '@/components/ui-custom/StatusBadge';
 import { getStudentsBySchool } from '@/lib/mock-data';
-import { Search, Users, Download, Filter, GraduationCap, User } from 'lucide-react';
+import { Search, Users, Download, Filter, GraduationCap, User, ChevronRight } from 'lucide-react';
+import Link from 'next/link';
 import { useState } from 'react';
 
 export default function PortalStudentsPage() {
@@ -158,42 +159,47 @@ export default function PortalStudentsPage() {
             {filteredStudents.length > 0 ? (
               <div className="space-y-3">
                 {filteredStudents.map((student) => (
-                  <div
+                  <Link
                     key={student.id}
-                    className="flex flex-col md:flex-row md:items-center justify-between p-4 rounded-lg border border-brand/10 hover:bg-brand/5 transition-colors"
+                    href={`/portal/students/${student.id}`}
                   >
-                    <div className="flex items-start gap-4 flex-1">
-                      {/* Avatar */}
-                      <div className="h-12 w-12 rounded-full bg-brand/10 flex items-center justify-center flex-shrink-0">
-                        <span className="text-brand font-semibold">
-                          {student.firstName[0]}{student.lastName[0]}
-                        </span>
-                      </div>
-
-                      {/* Student Info */}
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          <h3 className="font-semibold text-brand">
-                            {student.firstName} {student.lastName}
-                          </h3>
-                          <StatusBadge status={student.status} />
+                    <div className="flex flex-col md:flex-row md:items-center justify-between p-4 rounded-lg border border-brand/10 hover:bg-brand/5 hover:border-brand/30 transition-all cursor-pointer group">
+                      <div className="flex items-start gap-4 flex-1">
+                        {/* Avatar */}
+                        <div className="h-12 w-12 rounded-full bg-brand/10 flex items-center justify-center flex-shrink-0 group-hover:bg-brand group-hover:text-white transition-colors">
+                          <span className="text-brand font-semibold group-hover:text-white">
+                            {student.firstName[0]}{student.lastName[0]}
+                          </span>
                         </div>
-                        <p className="text-sm text-muted-foreground">
-                          {student.id} · {student.class} · {student.gender}
-                        </p>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          {student.vulnerabilityStatus} · Enrolled: {new Date(student.enrolledDate).toLocaleDateString()}
-                        </p>
+
+                        {/* Student Info */}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            <h3 className="font-semibold text-brand group-hover:underline">
+                              {student.firstName} {student.lastName}
+                            </h3>
+                            <StatusBadge status={student.status} />
+                          </div>
+                          <p className="text-sm text-muted-foreground">
+                            {student.id} · {student.class} · {student.gender}
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            {student.vulnerabilityStatus} · Enrolled: {new Date(student.enrolledDate).toLocaleDateString()}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Guardian Info */}
+                      <div className="mt-4 md:mt-0 md:text-right flex md:flex-col items-center gap-2">
+                        <div className="flex-1 text-left md:text-right">
+                          <p className="text-sm font-medium">{student.guardianName}</p>
+                          <p className="text-xs text-muted-foreground">{student.guardianRelationship}</p>
+                          <p className="text-xs text-muted-foreground">{student.guardianPhone}</p>
+                        </div>
+                        <ChevronRight className="h-5 w-5 text-muted-foreground group-hover:text-brand transition-colors" />
                       </div>
                     </div>
-
-                    {/* Guardian Info */}
-                    <div className="mt-4 md:mt-0 md:text-right">
-                      <p className="text-sm font-medium">{student.guardianName}</p>
-                      <p className="text-xs text-muted-foreground">{student.guardianRelationship}</p>
-                      <p className="text-xs text-muted-foreground">{student.guardianPhone}</p>
-                    </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
             ) : (
