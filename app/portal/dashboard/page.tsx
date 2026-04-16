@@ -83,7 +83,7 @@ export default function SchoolPortalDashboard() {
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle>Recent Payment Requests</CardTitle>
-              <Link href="/dashboard/payments">
+              <Link href="/portal/payments">
                 <Button variant="ghost" size="sm">View All</Button>
               </Link>
             </div>
