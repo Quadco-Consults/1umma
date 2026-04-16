@@ -26,7 +26,7 @@ export function RoleSwitcher() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger>
         <Button variant="outline" className="gap-2">
           Viewing as: <span className="font-semibold">{currentRoleLabel}</span>
           <ChevronDown className="h-4 w-4 opacity-50" />

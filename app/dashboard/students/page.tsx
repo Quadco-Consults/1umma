@@ -44,19 +44,22 @@ export default function StudentsPage() {
     setFilteredStudents(filtered);
   };
 
-  const handleSchoolChange = (value: string) => {
-    setSelectedSchool(value);
-    applyFilters(value, selectedClass, selectedStatus);
+  const handleSchoolChange = (value: string | null) => {
+    const val = value || 'all';
+    setSelectedSchool(val);
+    applyFilters(val, selectedClass, selectedStatus);
   };
 
-  const handleClassChange = (value: string) => {
-    setSelectedClass(value);
-    applyFilters(selectedSchool, value, selectedStatus);
+  const handleClassChange = (value: string | null) => {
+    const val = value || 'all';
+    setSelectedClass(val);
+    applyFilters(selectedSchool, val, selectedStatus);
   };
 
-  const handleStatusChange = (value: string) => {
-    setSelectedStatus(value);
-    applyFilters(selectedSchool, selectedClass, value);
+  const handleStatusChange = (value: string | null) => {
+    const val = value || 'all';
+    setSelectedStatus(val);
+    applyFilters(selectedSchool, selectedClass, val);
   };
 
   const columns: ColumnDef<Student>[] = [
