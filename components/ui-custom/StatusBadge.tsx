@@ -4,9 +4,11 @@ import type {
   StudentStatus,
   FeeStatus,
   PaymentStatus,
+  UserStatus,
+  RoleStatus,
 } from '@/lib/types';
 
-type BadgeStatus = StudentStatus | FeeStatus | PaymentStatus;
+type BadgeStatus = StudentStatus | FeeStatus | PaymentStatus | UserStatus | RoleStatus;
 
 interface StatusBadgeProps {
   status: BadgeStatus;
@@ -53,6 +55,16 @@ const statusConfig: Record<
   Rejected: {
     variant: 'destructive',
     className: 'bg-danger hover:bg-danger/90 text-white',
+  },
+
+  // User statuses
+  Inactive: {
+    variant: 'secondary',
+    className: 'bg-gray-400 hover:bg-gray-500 text-white',
+  },
+  Suspended: {
+    variant: 'destructive',
+    className: 'bg-red-500 hover:bg-red-600 text-white',
   },
 };
 

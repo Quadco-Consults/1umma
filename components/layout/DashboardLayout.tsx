@@ -25,7 +25,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         <TopBar onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
 
         {/* Page content */}
-        <main className="flex-1 overflow-y-auto bg-muted/20">
+        <main className="flex-1 overflow-y-auto bg-brand-cream/30">
           <div className="container mx-auto py-6 px-6 max-w-7xl">
             {children}
           </div>

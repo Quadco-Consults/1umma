@@ -5,6 +5,7 @@ import { DataTable } from '@/components/ui-custom/DataTable';
 import { StatusBadge } from '@/components/ui-custom/StatusBadge';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { PermissionGate } from '@/components/auth/PermissionGate';
 import { students } from '@/lib/mock-data';
 import type { Student } from '@/lib/types';
 import { ColumnDef } from '@tanstack/react-table';
@@ -79,16 +80,20 @@ export default function StudentsPage() {
     },
     {
       accessorKey: 'id',
-      header: 'Student ID',
+      header: 'Beneficiary ID',
     },
     {
       accessorKey: 'fullName',
-      header: 'Full Name',
-      cell: ({ row }) => `${row.original.firstName} ${row.original.lastName}`,
+      header: 'Student Name',
+      cell: ({ row }) => (
+        <div className="font-medium text-brand">
+          {`${row.original.firstName} ${row.original.lastName}`}
+        </div>
+      ),
     },
     {
       accessorKey: 'schoolName',
-      header: 'School',
+      header: 'Partner School',
     },
     {
       accessorKey: 'class',
@@ -100,7 +105,7 @@ export default function StudentsPage() {
     },
     {
       accessorKey: 'status',
-      header: 'Status',
+      header: 'Scholarship Status',
       cell: ({ row }) => <StatusBadge status={row.original.status} />,
     },
   ];
@@ -136,20 +141,20 @@ export default function StudentsPage() {
         {/* Header */}
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Students</h1>
+            <h1 className="text-3xl font-bold tracking-tight text-brand">Sponsored Students</h1>
             <p className="text-muted-foreground mt-1">
-              Manage all beneficiaries across all schools
+              Manage all scholarship beneficiaries across partner schools
             </p>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" className="gap-2" onClick={handleExport}>
+            <Button variant="outline" className="gap-2 border-brand/30 text-brand hover:bg-brand/10" onClick={handleExport}>
               <Download className="h-4 w-4" />
               Export CSV
             </Button>
             <Link href="/dashboard/students/new">
-              <Button className="gap-2">
+              <Button className="gap-2 bg-brand hover:bg-brand/90 shadow-md">
                 <Plus className="h-4 w-4" />
-                Add Student
+                Sponsor Student
               </Button>
             </Link>
           </div>

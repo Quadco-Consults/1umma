@@ -7,13 +7,26 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { StatusBadge } from '@/components/ui-custom/StatusBadge';
 import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { getStudentById, getFeesByStudent, formatDate, formatCurrency } from '@/lib/mock-data';
-import { ArrowLeft, Edit, GraduationCap, Mail, Phone, MapPin, Calendar, User } from 'lucide-react';
+import { ArrowLeft, Edit, GraduationCap, Mail, Phone, MapPin, Calendar, User, Upload, FileText, Download, Trash2, Eye } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
 import { ConfirmModal } from '@/components/ui-custom/ConfirmModal';
 import { toast } from 'sonner';
+
+interface Document {
+  id: string;
+  name: string;
+  category: string;
+  size: string;
+  uploadedBy: string;
+  uploadedDate: string;
+  url: string;
+}
 
 export default function StudentProfilePage() {
   const params = useParams();
@@ -21,6 +34,37 @@ export default function StudentProfilePage() {
   const student = getStudentById(studentId);
   const feeHistory = getFeesByStudent(studentId);
   const [showGraduateModal, setShowGraduateModal] = useState(false);
+  const [documents, setDocuments] = useState<Document[]>([
+    {
+      id: 'DOC001',
+      name: 'Student ID Card.pdf',
+      category: 'Identification',
+      size: '2.4 MB',
+      uploadedBy: 'Muhammad Ilu',
+      uploadedDate: '2025-03-15',
+      url: '#',
+    },
+    {
+      id: 'DOC002',
+      name: 'Birth Certificate.pdf',
+      category: 'Identification',
+      size: '1.8 MB',
+      uploadedBy: 'Aisha Ibrahim',
+      uploadedDate: '2025-03-15',
+      url: '#',
+    },
+    {
+      id: 'DOC003',
+      name: 'Enrollment Form.pdf',
+      category: 'Enrollment',
+      size: '980 KB',
+      uploadedBy: 'Muhammad Ilu',
+      uploadedDate: '2025-02-20',
+      url: '#',
+    },
+  ]);
+  const [uploadCategory, setUploadCategory] = useState('');
+  const [uploadFile, setUploadFile] = useState<File | null>(null);
 
   if (!student) {
     return (
@@ -47,6 +91,34 @@ export default function StudentProfilePage() {
   const handleGraduate = () => {
     toast.success(`${student.firstName} ${student.lastName} has been marked as graduated`);
     setShowGraduateModal(false);
+  };
+
+  const handleFileUpload = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!uploadFile || !uploadCategory) {
+      toast.error('Please select a file and category');
+      return;
+    }
+
+    const newDocument: Document = {
+      id: `DOC${String(documents.length + 1).padStart(3, '0')}`,
+      name: uploadFile.name,
+      category: uploadCategory,
+      size: `${(uploadFile.size / 1024 / 1024).toFixed(2)} MB`,
+      uploadedBy: 'Muhammad Ilu',
+      uploadedDate: new Date().toISOString().split('T')[0],
+      url: '#',
+    };
+
+    setDocuments([newDocument, ...documents]);
+    setUploadFile(null);
+    setUploadCategory('');
+    toast.success('Document uploaded successfully');
+  };
+
+  const handleDeleteDocument = (docId: string) => {
+    setDocuments(documents.filter(doc => doc.id !== docId));
+    toast.success('Document deleted successfully');
   };
 
   // Mock school history
@@ -304,15 +376,140 @@ export default function StudentProfilePage() {
           </TabsContent>
 
           {/* Documents Tab */}
-          <TabsContent value="documents">
-            <Card>
+          <TabsContent value="documents" className="space-y-6">
+            {/* Upload Form */}
+            <Card className="border-brand/20 shadow-md">
               <CardHeader>
-                <CardTitle>Documents</CardTitle>
+                <CardTitle className="text-brand flex items-center gap-2">
+                  <Upload className="h-5 w-5" />
+                  Upload New Document
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-center text-muted-foreground py-8">
-                  No documents uploaded for this student.
-                </p>
+                <form onSubmit={handleFileUpload} className="space-y-4">
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="category">Document Category *</Label>
+                      <Select value={uploadCategory} onValueChange={setUploadCategory} required>
+                        <SelectTrigger className="border-brand/30 focus:border-brand">
+                          <SelectValue placeholder="Select category" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Identification">Identification</SelectItem>
+                          <SelectItem value="Enrollment">Enrollment Forms</SelectItem>
+                          <SelectItem value="Medical">Medical Records</SelectItem>
+                          <SelectItem value="Academic">Academic Records</SelectItem>
+                          <SelectItem value="Financial">Financial Documents</SelectItem>
+                          <SelectItem value="Other">Other</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="file">Select File *</Label>
+                      <Input
+                        id="file"
+                        type="file"
+                        required
+                        onChange={(e) => setUploadFile(e.target.files?.[0] || null)}
+                        className="border-brand/30 focus:border-brand"
+                        accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        Accepted: PDF, DOC, DOCX, JPG, PNG (Max 10MB)
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-end">
+                    <Button type="submit" className="bg-brand hover:bg-brand/90 text-white gap-2">
+                      <Upload className="h-4 w-4" />
+                      Upload Document
+                    </Button>
+                  </div>
+                </form>
+              </CardContent>
+            </Card>
+
+            {/* Documents List */}
+            <Card className="border-brand/20 shadow-md">
+              <CardHeader>
+                <CardTitle className="text-brand flex items-center gap-2">
+                  <FileText className="h-5 w-5" />
+                  Uploaded Documents ({documents.length})
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {documents.length > 0 ? (
+                  <div className="space-y-3">
+                    {documents.map((doc) => (
+                      <div
+                        key={doc.id}
+                        className="flex items-center justify-between p-4 border border-brand/20 rounded-lg hover:bg-brand/5 transition-colors"
+                      >
+                        <div className="flex items-center gap-4 flex-1">
+                          <div className="h-12 w-12 rounded-lg bg-brand/10 flex items-center justify-center flex-shrink-0">
+                            <FileText className="h-6 w-6 text-brand" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-semibold text-brand truncate">{doc.name}</h4>
+                            <div className="flex flex-wrap items-center gap-2 mt-1">
+                              <Badge variant="outline" className="text-xs">
+                                {doc.category}
+                              </Badge>
+                              <span className="text-xs text-muted-foreground">•</span>
+                              <span className="text-xs text-muted-foreground">{doc.size}</span>
+                              <span className="text-xs text-muted-foreground">•</span>
+                              <span className="text-xs text-muted-foreground">
+                                Uploaded by {doc.uploadedBy}
+                              </span>
+                              <span className="text-xs text-muted-foreground">•</span>
+                              <span className="text-xs text-muted-foreground">
+                                {formatDate(doc.uploadedDate)}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-2 flex-shrink-0">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="gap-1 border-brand/30 text-brand hover:bg-brand/10"
+                          >
+                            <Eye className="h-4 w-4" />
+                            View
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="gap-1 border-brand/30 text-brand hover:bg-brand/10"
+                          >
+                            <Download className="h-4 w-4" />
+                            Download
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="gap-1 border-red-300 text-red-600 hover:bg-red-50"
+                            onClick={() => handleDeleteDocument(doc.id)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                            Delete
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
+                    <p className="text-muted-foreground">No documents uploaded yet</p>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Upload student documents using the form above
+                    </p>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>

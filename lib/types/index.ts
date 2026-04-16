@@ -93,23 +93,78 @@ export interface PaymentRequest {
   breakdown: PaymentBreakdown[];
 }
 
-// User types
-export interface UserPermissions {
-  students: string[];
-  schools: string[];
-  fees: string[];
-  payments: string[];
-  reports: string[];
+// Permission types
+export type PermissionAction = 'create' | 'read' | 'update' | 'delete' | 'approve';
+export type PermissionModule = 'students' | 'schools' | 'fees' | 'payments' | 'reports' | 'users' | 'roles';
+
+export interface Permission {
+  id: string;
+  module: PermissionModule;
+  action: PermissionAction;
+  name: string;
+  description: string;
 }
+
+// Role types
+export type RoleStatus = 'Active' | 'Inactive';
+
+export interface Role {
+  id: string;
+  name: string;
+  description: string;
+  status: RoleStatus;
+  approvalLimit: number; // Maximum amount user can approve (in Naira)
+  permissions: Permission[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+// User types
+export type UserStatus = 'Active' | 'Inactive' | 'Suspended';
 
 export interface User {
   id: string;
-  role: UserRole;
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
+  phone: string;
+  roleId: string;
+  roleName: string;
+  status: UserStatus;
+  approvalLimit: number;
   schoolId?: string;
   schoolName?: string;
-  permissions: UserPermissions;
+  createdAt: string;
+  lastLogin?: string;
+}
+
+// Approval Workflow types
+export type ApprovalStatus = 'Pending' | 'Approved' | 'Rejected';
+export type ApprovalType = 'Payment' | 'Scholarship' | 'Fee Waiver';
+
+export interface ApprovalWorkflow {
+  id: string;
+  type: ApprovalType;
+  requestId: string;
+  requestTitle: string;
+  requestedBy: string;
+  requestedByName: string;
+  amount: number;
+  currentLevel: number;
+  totalLevels: number;
+  status: ApprovalStatus;
+  createdAt: string;
+  approvals: ApprovalStep[];
+}
+
+export interface ApprovalStep {
+  level: number;
+  approverId: string;
+  approverName: string;
+  approverRole: string;
+  status: ApprovalStatus;
+  approvedAt?: string;
+  comments?: string;
 }
 
 // Dashboard stats
