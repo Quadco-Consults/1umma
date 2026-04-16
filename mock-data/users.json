@@ -1,0 +1,43 @@
+[
+  {
+    "id": "USR-001",
+    "role": "admin",
+    "name": "Admin User",
+    "email": "admin@1ummah.org",
+    "permissions": {
+      "students": ["create", "read", "update", "delete"],
+      "schools": ["create", "read", "update", "delete"],
+      "fees": ["create", "read", "update", "delete", "generate"],
+      "payments": ["create", "read", "update", "delete", "approve", "reject"],
+      "reports": ["read", "export"]
+    }
+  },
+  {
+    "id": "USR-002",
+    "role": "staff",
+    "name": "Staff User",
+    "email": "staff@1ummah.org",
+    "permissions": {
+      "students": ["create", "read", "update"],
+      "schools": ["read"],
+      "fees": ["read"],
+      "payments": ["read"],
+      "reports": []
+    }
+  },
+  {
+    "id": "USR-003",
+    "role": "school",
+    "name": "School User - Eqraah College",
+    "email": "school@eqraah.edu.ng",
+    "schoolId": "SCH-001",
+    "schoolName": "Eqraah College",
+    "permissions": {
+      "students": ["read"],
+      "schools": [],
+      "fees": ["read"],
+      "payments": ["create", "read"],
+      "reports": []
+    }
+  }
+]
