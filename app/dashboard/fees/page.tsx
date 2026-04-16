@@ -6,7 +6,6 @@ import { StatusBadge } from '@/components/ui-custom/StatusBadge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { PermissionGate } from '@/components/auth/PermissionGate';
 import { fees, schools, formatCurrency, formatDate } from '@/lib/mock-data';
 import type { FeeRecord } from '@/lib/types';
 import { ColumnDef } from '@tanstack/react-table';
@@ -167,14 +166,12 @@ export default function FeesPage() {
               <Download className="h-4 w-4" />
               Export CSV
             </Button>
-            <PermissionGate module="fees" action="create">
-              <Link href="/dashboard/fees/generate">
-                <Button className="gap-2 bg-brand hover:bg-brand/90 shadow-md">
-                  <Plus className="h-4 w-4" />
-                  Generate Fees
-                </Button>
-              </Link>
-            </PermissionGate>
+            <Link href="/dashboard/fees/generate">
+              <Button className="gap-2 bg-brand hover:bg-brand/90 shadow-md">
+                <Plus className="h-4 w-4" />
+                Generate Fees
+              </Button>
+            </Link>
           </div>
         </div>
 

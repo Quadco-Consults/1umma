@@ -6,7 +6,6 @@ import { StatusBadge } from '@/components/ui-custom/StatusBadge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { PermissionGate } from '@/components/auth/PermissionGate';
 import { roles } from '@/lib/mock-data-users';
 import type { Role } from '@/lib/types';
 import { ColumnDef } from '@tanstack/react-table';
@@ -106,14 +105,12 @@ export default function RolesPage() {
               Manage user roles and configure permissions
             </p>
           </div>
-          <PermissionGate module="roles" action="create">
-            <Link href="/dashboard/roles/new">
-              <Button className="gap-2 bg-brand hover:bg-brand/90 shadow-md">
-                <Plus className="h-4 w-4" />
-                Create Role
-              </Button>
-            </Link>
-          </PermissionGate>
+          <Link href="/dashboard/roles/new">
+            <Button className="gap-2 bg-brand hover:bg-brand/90 shadow-md">
+              <Plus className="h-4 w-4" />
+              Create Role
+            </Button>
+          </Link>
         </div>
 
         {/* Stats Cards */}

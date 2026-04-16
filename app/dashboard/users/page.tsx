@@ -5,7 +5,6 @@ import { DataTable } from '@/components/ui-custom/DataTable';
 import { StatusBadge } from '@/components/ui-custom/StatusBadge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { PermissionGate } from '@/components/auth/PermissionGate';
 import { users } from '@/lib/mock-data-users';
 import type { User } from '@/lib/types';
 import { ColumnDef } from '@tanstack/react-table';
@@ -106,22 +105,18 @@ export default function UsersPage() {
             </p>
           </div>
           <div className="flex gap-2">
-            <PermissionGate module="roles" action="read">
-              <Link href="/dashboard/roles">
-                <Button variant="outline" className="gap-2 border-brand/30 text-brand hover:bg-brand/10">
-                  <Shield className="h-4 w-4" />
-                  Manage Roles
-                </Button>
-              </Link>
-            </PermissionGate>
-            <PermissionGate module="users" action="create">
-              <Link href="/dashboard/users/new">
-                <Button className="gap-2 bg-brand hover:bg-brand/90 shadow-md">
-                  <Plus className="h-4 w-4" />
-                  Add User
-                </Button>
-              </Link>
-            </PermissionGate>
+            <Link href="/dashboard/roles">
+              <Button variant="outline" className="gap-2 border-brand/30 text-brand hover:bg-brand/10">
+                <Shield className="h-4 w-4" />
+                Manage Roles
+              </Button>
+            </Link>
+            <Link href="/dashboard/users/new">
+              <Button className="gap-2 bg-brand hover:bg-brand/90 shadow-md">
+                <Plus className="h-4 w-4" />
+                Add User
+              </Button>
+            </Link>
           </div>
         </div>
 

@@ -3,10 +3,13 @@
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { DataTable } from '@/components/ui-custom/DataTable';
 import { StatusBadge } from '@/components/ui-custom/StatusBadge';
+import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { payments, formatCurrency, formatDate } from '@/lib/mock-data';
 import type { PaymentRequest } from '@/lib/types';
 import { ColumnDef } from '@tanstack/react-table';
+import { Plus } from 'lucide-react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -87,11 +90,19 @@ export default function PaymentsPage() {
     <DashboardLayout>
       <div className="space-y-6">
         {/* Header */}
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Payment Requests</h1>
-          <p className="text-muted-foreground mt-1">
-            Review and process payment requests from schools
-          </p>
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">Payment Requests</h1>
+            <p className="text-muted-foreground mt-1">
+              Review and process payment requests from schools
+            </p>
+          </div>
+          <Link href="/dashboard/payments/new">
+            <Button className="gap-2 bg-brand hover:bg-brand/90 shadow-md">
+              <Plus className="h-4 w-4" />
+              New Payment Request
+            </Button>
+          </Link>
         </div>
 
         {/* Stats */}
