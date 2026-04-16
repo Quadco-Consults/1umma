@@ -3,12 +3,12 @@
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Button } from '@/components/ui/button';
 import { useRole } from '@/contexts/RoleContext';
 import { ChevronDown, Shield, Users, School } from 'lucide-react';
 
@@ -26,31 +26,31 @@ export function RoleSwitcher() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
-        <Button variant="outline" className="gap-2">
-          Viewing as: <span className="font-semibold">{currentRoleLabel}</span>
-          <ChevronDown className="h-4 w-4 opacity-50" />
-        </Button>
+      <DropdownMenuTrigger className="inline-flex items-center justify-center gap-2 rounded-md border border-input bg-background px-4 py-2 text-sm font-medium ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
+        Viewing as: <span className="font-semibold">{currentRoleLabel}</span>
+        <ChevronDown className="h-4 w-4 opacity-50" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
-        <DropdownMenuLabel>Switch Role</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        {roles.map((role) => {
-          const Icon = role.icon;
-          return (
-            <DropdownMenuItem
-              key={role.value}
-              onClick={() => setRole(role.value)}
-              className="gap-2"
-            >
-              <Icon className="h-4 w-4" />
-              {role.label}
-              {currentRole === role.value && (
-                <span className="ml-auto text-brand">✓</span>
-              )}
-            </DropdownMenuItem>
-          );
-        })}
+        <DropdownMenuGroup>
+          <DropdownMenuLabel>Switch Role</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          {roles.map((role) => {
+            const Icon = role.icon;
+            return (
+              <DropdownMenuItem
+                key={role.value}
+                onClick={() => setRole(role.value)}
+                className="gap-2"
+              >
+                <Icon className="h-4 w-4" />
+                {role.label}
+                {currentRole === role.value && (
+                  <span className="ml-auto text-brand">✓</span>
+                )}
+              </DropdownMenuItem>
+            );
+          })}
+        </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
   );
