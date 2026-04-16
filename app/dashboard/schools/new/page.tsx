@@ -13,10 +13,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { ArrowLeft, School as SchoolIcon, MapPin, Phone, User } from 'lucide-react';
+import { ArrowLeft, School as SchoolIcon, MapPin, Phone, User, DollarSign } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 export default function NewSchoolPage() {
   const router = useRouter();
@@ -30,11 +31,49 @@ export default function NewSchoolPage() {
     contactEmail: '',
   });
 
+  const [feeStructure, setFeeStructure] = useState([
+    { classLevel: 'Nursery 1', termlyFee: 0 },
+    { classLevel: 'Nursery 2', termlyFee: 0 },
+    { classLevel: 'Primary 1', termlyFee: 0 },
+    { classLevel: 'Primary 2', termlyFee: 0 },
+    { classLevel: 'Primary 3', termlyFee: 0 },
+    { classLevel: 'Primary 4', termlyFee: 0 },
+    { classLevel: 'Primary 5', termlyFee: 0 },
+    { classLevel: 'Primary 6', termlyFee: 0 },
+    { classLevel: 'JSS1', termlyFee: 0 },
+    { classLevel: 'JSS2', termlyFee: 0 },
+    { classLevel: 'JSS3', termlyFee: 0 },
+    { classLevel: 'SS1', termlyFee: 0 },
+    { classLevel: 'SS2', termlyFee: 0 },
+    { classLevel: 'SS3', termlyFee: 0 },
+  ]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Validate that at least one fee is set
+    const hasAtLeastOneFee = feeStructure.some(f => f.termlyFee > 0);
+    if (!hasAtLeastOneFee) {
+      toast.error('Please set at least one class fee');
+      return;
+    }
+
     // In a real app, this would call an API
-    console.log('Creating school:', formData);
+    const schoolData = {
+      ...formData,
+      feeStructure: feeStructure.filter(f => f.termlyFee > 0), // Only save classes with fees
+    };
+    console.log('Creating school:', schoolData);
+    toast.success('School added successfully!');
     router.push('/dashboard/schools');
+  };
+
+  const updateFee = (classLevel: string, amount: number) => {
+    setFeeStructure(
+      feeStructure.map((fee) =>
+        fee.classLevel === classLevel ? { ...fee, termlyFee: amount } : fee
+      )
+    );
   };
 
   const nigerianStates = [
@@ -194,6 +233,125 @@ export default function NewSchoolPage() {
                       placeholder="contact@school.edu.ng"
                       className="border-brand/30 focus:border-brand"
                     />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Fee Structure */}
+            <Card className="border-brand/20 shadow-md">
+              <CardHeader>
+                <CardTitle className="text-brand flex items-center gap-2">
+                  <DollarSign className="h-5 w-5" />
+                  Termly Fee Structure
+                </CardTitle>
+                <CardDescription>
+                  Set fees for each class level (Only set fees for classes you offer)
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {/* Nursery */}
+                  <div>
+                    <h4 className="font-semibold text-sm mb-3 text-muted-foreground">Nursery</h4>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      {feeStructure.slice(0, 2).map((fee) => (
+                        <div key={fee.classLevel} className="space-y-2">
+                          <Label htmlFor={fee.classLevel}>{fee.classLevel}</Label>
+                          <div className="relative">
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">₦</span>
+                            <Input
+                              id={fee.classLevel}
+                              type="number"
+                              min="0"
+                              value={fee.termlyFee || ''}
+                              onChange={(e) => updateFee(fee.classLevel, parseFloat(e.target.value) || 0)}
+                              placeholder="0"
+                              className="pl-8 border-brand/30 focus:border-brand"
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Primary */}
+                  <div>
+                    <h4 className="font-semibold text-sm mb-3 text-muted-foreground">Primary</h4>
+                    <div className="grid md:grid-cols-3 gap-4">
+                      {feeStructure.slice(2, 8).map((fee) => (
+                        <div key={fee.classLevel} className="space-y-2">
+                          <Label htmlFor={fee.classLevel}>{fee.classLevel}</Label>
+                          <div className="relative">
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">₦</span>
+                            <Input
+                              id={fee.classLevel}
+                              type="number"
+                              min="0"
+                              value={fee.termlyFee || ''}
+                              onChange={(e) => updateFee(fee.classLevel, parseFloat(e.target.value) || 0)}
+                              placeholder="0"
+                              className="pl-8 border-brand/30 focus:border-brand"
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Junior Secondary */}
+                  <div>
+                    <h4 className="font-semibold text-sm mb-3 text-muted-foreground">Junior Secondary (JSS)</h4>
+                    <div className="grid md:grid-cols-3 gap-4">
+                      {feeStructure.slice(8, 11).map((fee) => (
+                        <div key={fee.classLevel} className="space-y-2">
+                          <Label htmlFor={fee.classLevel}>{fee.classLevel}</Label>
+                          <div className="relative">
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">₦</span>
+                            <Input
+                              id={fee.classLevel}
+                              type="number"
+                              min="0"
+                              value={fee.termlyFee || ''}
+                              onChange={(e) => updateFee(fee.classLevel, parseFloat(e.target.value) || 0)}
+                              placeholder="0"
+                              className="pl-8 border-brand/30 focus:border-brand"
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Senior Secondary */}
+                  <div>
+                    <h4 className="font-semibold text-sm mb-3 text-muted-foreground">Senior Secondary (SS)</h4>
+                    <div className="grid md:grid-cols-3 gap-4">
+                      {feeStructure.slice(11, 14).map((fee) => (
+                        <div key={fee.classLevel} className="space-y-2">
+                          <Label htmlFor={fee.classLevel}>{fee.classLevel}</Label>
+                          <div className="relative">
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">₦</span>
+                            <Input
+                              id={fee.classLevel}
+                              type="number"
+                              min="0"
+                              value={fee.termlyFee || ''}
+                              onChange={(e) => updateFee(fee.classLevel, parseFloat(e.target.value) || 0)}
+                              placeholder="0"
+                              className="pl-8 border-brand/30 focus:border-brand"
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                    <p className="text-sm text-blue-900">
+                      <strong>💡 Tip:</strong> Only enter fees for the class levels your school offers.
+                      Leave others at ₦0. You can always update this later.
+                    </p>
                   </div>
                 </div>
               </CardContent>

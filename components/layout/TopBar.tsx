@@ -84,11 +84,17 @@ export function TopBar({ onMenuClick }: TopBarProps) {
                 </div>
               </div>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="cursor-pointer">
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onClick={() => router.push('/dashboard/profile')}
+              >
                 <User className="mr-2 h-4 w-4 text-brand" />
                 <span>My Profile</span>
               </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer">
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onClick={() => router.push('/dashboard/settings')}
+              >
                 <Settings className="mr-2 h-4 w-4 text-brand" />
                 <span>Settings</span>
               </DropdownMenuItem>

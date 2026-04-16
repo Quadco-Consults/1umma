@@ -9,9 +9,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { fees, schools, formatCurrency, formatDate } from '@/lib/mock-data';
 import type { FeeRecord } from '@/lib/types';
 import { ColumnDef } from '@tanstack/react-table';
-import { Plus, Download, DollarSign } from 'lucide-react';
+import { Plus, Download, DollarSign, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 export default function FeesPage() {
   const [filteredFees, setFilteredFees] = useState<FeeRecord[]>(fees);
@@ -77,6 +78,13 @@ export default function FeesPage() {
   const totalPaid = filteredFees.reduce((sum, f) => sum + f.amountPaid, 0);
   const totalOutstanding = filteredFees.reduce((sum, f) => sum + f.balance, 0);
 
+  const handleMarkAsPaid = (feeId: string, studentName: string) => {
+    // In production, this would make an API call to mark the fee as paid
+    console.log('Marking fee as paid:', feeId);
+    toast.success(`Fee for ${studentName} marked as paid successfully`);
+    // You would typically reload the data here or update the state
+  };
+
   const columns: ColumnDef<FeeRecord>[] = [
     {
       accessorKey: 'studentName',
@@ -121,6 +129,30 @@ export default function FeesPage() {
       accessorKey: 'status',
       header: 'Status',
       cell: ({ row }) => <StatusBadge status={row.original.status} />,
+    },
+    {
+      id: 'actions',
+      header: 'Actions',
+      cell: ({ row }) => {
+        const fee = row.original;
+        if (fee.status === 'Paid' || fee.balance === 0) {
+          return null;
+        }
+        return (
+          <Button
+            size="sm"
+            variant="outline"
+            className="gap-1 border-green-600 text-green-600 hover:bg-green-50"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleMarkAsPaid(fee.id, fee.studentName);
+            }}
+          >
+            <CheckCircle className="h-3 w-3" />
+            Mark Paid
+          </Button>
+        );
+      },
     },
   ];
 

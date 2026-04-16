@@ -5,7 +5,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { PermissionGate } from '@/components/auth/PermissionGate';
 import { schools, formatCurrency } from '@/lib/mock-data';
 import type { School } from '@/lib/types';
 import { Plus, Search, MapPin, Phone, Users, DollarSign } from 'lucide-react';
@@ -40,14 +39,12 @@ export default function SchoolsPage() {
               Manage all participating schools in the SILP program
             </p>
           </div>
-          <PermissionGate module="schools" action="create">
-            <Link href="/dashboard/schools/new">
-              <Button className="gap-2 bg-brand hover:bg-brand/90 shadow-md">
-                <Plus className="h-4 w-4" />
-                Add School
-              </Button>
-            </Link>
-          </PermissionGate>
+          <Link href="/dashboard/schools/new">
+            <Button className="gap-2 bg-brand hover:bg-brand/90 shadow-md">
+              <Plus className="h-4 w-4" />
+              Add School
+            </Button>
+          </Link>
         </div>
 
         {/* Filters */}

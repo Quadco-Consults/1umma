@@ -13,12 +13,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { ArrowLeft, Upload, FileText } from 'lucide-react';
+import { ArrowLeft, Upload, FileText, Calculator } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
-import { schools } from '@/lib/mock-data';
+import { schools, fees, formatCurrency } from '@/lib/mock-data';
 
 export default function NewPaymentRequestPage() {
   const router = useRouter();
@@ -31,6 +31,45 @@ export default function NewPaymentRequestPage() {
     description: '',
     invoice: null as File | null,
   });
+  const [calculatedFees, setCalculatedFees] = useState({
+    totalDue: 0,
+    totalOutstanding: 0,
+    studentCount: 0,
+  });
+
+  // Calculate fees when school, term, or year changes
+  useEffect(() => {
+    if (formData.schoolId && formData.term && formData.academicYear) {
+      const selectedSchool = schools.find(s => s.id === formData.schoolId);
+      if (selectedSchool) {
+        // Filter fees for this school, term, and year
+        const relevantFees = fees.filter(
+          f => f.schoolName === selectedSchool.name &&
+               f.term === formData.term &&
+               f.year === formData.academicYear
+        );
+
+        const totalDue = relevantFees.reduce((sum, f) => sum + f.amountDue, 0);
+        const totalOutstanding = relevantFees.reduce((sum, f) => sum + f.balance, 0);
+        const uniqueStudents = new Set(relevantFees.map(f => f.studentName)).size;
+
+        setCalculatedFees({
+          totalDue,
+          totalOutstanding,
+          studentCount: uniqueStudents,
+        });
+
+        // Auto-fill amount and student count
+        setFormData(prev => ({
+          ...prev,
+          amount: totalOutstanding.toString(),
+          studentCount: uniqueStudents.toString(),
+        }));
+      }
+    } else {
+      setCalculatedFees({ totalDue: 0, totalOutstanding: 0, studentCount: 0 });
+    }
+  }, [formData.schoolId, formData.term, formData.academicYear]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,6 +108,49 @@ export default function NewPaymentRequestPage() {
             </p>
           </div>
         </div>
+
+        {/* Fee Calculation Summary */}
+        {calculatedFees.totalDue > 0 && (
+          <Card className="border-blue-200 bg-blue-50/50 shadow-md">
+            <CardHeader>
+              <CardTitle className="text-blue-900 flex items-center gap-2">
+                <Calculator className="h-5 w-5" />
+                Calculated Fees Summary
+              </CardTitle>
+              <CardDescription className="text-blue-700">
+                Based on generated fees for selected school, term, and year
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid md:grid-cols-3 gap-4">
+                <div className="bg-white rounded-lg p-4 border border-blue-200">
+                  <div className="text-sm text-muted-foreground">Total Fees Generated</div>
+                  <div className="text-2xl font-bold text-blue-900 mt-1">
+                    {formatCurrency(calculatedFees.totalDue)}
+                  </div>
+                </div>
+                <div className="bg-white rounded-lg p-4 border border-orange-200">
+                  <div className="text-sm text-muted-foreground">Outstanding Balance</div>
+                  <div className="text-2xl font-bold text-orange-600 mt-1">
+                    {formatCurrency(calculatedFees.totalOutstanding)}
+                  </div>
+                </div>
+                <div className="bg-white rounded-lg p-4 border border-green-200">
+                  <div className="text-sm text-muted-foreground">Number of Students</div>
+                  <div className="text-2xl font-bold text-green-600 mt-1">
+                    {calculatedFees.studentCount}
+                  </div>
+                </div>
+              </div>
+              <div className="mt-4 p-3 bg-white rounded-lg border border-blue-200">
+                <p className="text-sm text-blue-900">
+                  <strong>💡 Tip:</strong> The amount has been auto-filled with the outstanding balance.
+                  You can adjust it if making a partial payment.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
