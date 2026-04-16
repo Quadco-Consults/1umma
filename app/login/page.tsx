@@ -6,8 +6,7 @@ import { useRole } from '@/contexts/RoleContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Mail, Lock, ArrowLeft, Eye, EyeOff } from 'lucide-react';
+import { Mail, Lock, ArrowLeft, Eye, EyeOff, GraduationCap, Heart, Award, CheckCircle2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { toast } from 'sonner';
@@ -53,140 +52,231 @@ export default function LoginPage() {
     router.push(redirectPath);
   };
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-brand/5 via-white to-brand-light/20 flex items-center justify-center p-4">
-      {/* Background decoration */}
-      <div className="absolute inset-0 opacity-5 overflow-hidden">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-brand rounded-full blur-3xl"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-brand-light rounded-full blur-3xl"></div>
-      </div>
+  const features = [
+    { icon: GraduationCap, text: 'Quality Islamic Education' },
+    { icon: Heart, text: 'Holistic Support System' },
+    { icon: Award, text: 'Merit-Based Selection' },
+  ];
 
-      <div className="w-full max-w-md relative z-10">
-        {/* Back to home button */}
-        <div className="mb-6">
-          <Link href="/">
-            <Button variant="ghost" className="text-brand hover:text-brand/80 hover:bg-brand/10">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Home
-            </Button>
-          </Link>
+  return (
+    <div className="min-h-screen flex">
+      {/* Left Side - Branding & Design */}
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-brand via-brand/95 to-brand/90 relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-20 left-10 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-brand-light rounded-full blur-3xl"></div>
         </div>
 
-        {/* Login Card */}
-        <Card className="border-2 border-brand/20 shadow-2xl">
-          <CardHeader className="space-y-4 pb-6">
-            {/* Logo */}
-            <div className="flex justify-center">
-              <div className="relative h-20 w-20 bg-brand/10 rounded-full p-3">
-                <Image
-                  src="/1Ummah-Web-logo.png"
-                  alt="1Ummah Logo"
-                  fill
-                  className="object-contain p-2"
-                  sizes="80px"
-                  priority
+        {/* Content */}
+        <div className="relative z-10 flex flex-col justify-between p-12 text-white w-full">
+          {/* Logo & Brand */}
+          <div className="flex items-center gap-3">
+            <div className="relative h-16 w-16 bg-white rounded-full p-2">
+              <Image
+                src="/1Ummah-Web-logo.png"
+                alt="1Ummah Logo"
+                fill
+                className="object-contain p-1"
+                sizes="64px"
+                priority
+              />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold">1-Ummah</h1>
+              <p className="text-sm text-white/90">Islamic Organisation</p>
+            </div>
+          </div>
+
+          {/* Main Message */}
+          <div className="space-y-8">
+            <div className="space-y-4">
+              <h2 className="text-5xl font-bold leading-tight">
+                Empowering the Ummah Through Education
+              </h2>
+              <p className="text-xl text-white/90 leading-relaxed">
+                SILP Management Platform - Transforming lives through quality Islamic education
+                and comprehensive scholarship support.
+              </p>
+            </div>
+
+            {/* Features */}
+            <div className="space-y-4">
+              {features.map((feature, index) => {
+                const Icon = feature.icon;
+                return (
+                  <div key={index} className="flex items-center gap-3 text-white/95">
+                    <div className="h-12 w-12 rounded-lg bg-white/20 backdrop-blur-sm flex items-center justify-center flex-shrink-0">
+                      <Icon className="h-6 w-6" />
+                    </div>
+                    <span className="text-lg font-medium">{feature.text}</span>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Stats */}
+            <div className="grid grid-cols-3 gap-6 pt-6 border-t border-white/20">
+              <div>
+                <div className="text-4xl font-bold">500+</div>
+                <div className="text-sm text-white/80">Students</div>
+              </div>
+              <div>
+                <div className="text-4xl font-bold">50+</div>
+                <div className="text-sm text-white/80">Schools</div>
+              </div>
+              <div>
+                <div className="text-4xl font-bold">₦50M+</div>
+                <div className="text-sm text-white/80">Awarded</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="text-sm text-white/70">
+            © 2026 1Ummah Islamic Organisation. All rights reserved.
+          </div>
+        </div>
+      </div>
+
+      {/* Right Side - Login Form */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white">
+        <div className="w-full max-w-md space-y-8">
+          {/* Back Button */}
+          <div>
+            <Link href="/">
+              <Button variant="ghost" className="text-brand hover:text-brand/80 hover:bg-brand/10 -ml-2">
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Back to Home
+              </Button>
+            </Link>
+          </div>
+
+          {/* Logo for mobile */}
+          <div className="lg:hidden flex justify-center">
+            <div className="relative h-20 w-20 bg-brand/10 rounded-full p-3">
+              <Image
+                src="/1Ummah-Web-logo.png"
+                alt="1Ummah Logo"
+                fill
+                className="object-contain p-2"
+                sizes="80px"
+                priority
+              />
+            </div>
+          </div>
+
+          {/* Header */}
+          <div className="space-y-2">
+            <h1 className="text-4xl font-bold text-brand">Welcome Back</h1>
+            <p className="text-gray-600">
+              Sign in to access the SILP Management Platform
+            </p>
+          </div>
+
+          {/* Login Form */}
+          <form onSubmit={handleLogin} className="space-y-6">
+            {/* Email Field */}
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-brand font-medium text-sm">
+                Email Address
+              </Label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-brand/60" />
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="pl-10 h-12 border-brand/30 focus:border-brand text-base"
+                  disabled={isLoading}
                 />
               </div>
             </div>
 
-            <div className="text-center space-y-2">
-              <CardTitle className="text-3xl font-bold text-brand">Welcome Back</CardTitle>
-              <CardDescription className="text-base">
-                Sign in to access the SILP Management Platform
-              </CardDescription>
-            </div>
-          </CardHeader>
-
-          <CardContent>
-            <form onSubmit={handleLogin} className="space-y-6">
-              {/* Email Field */}
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-brand font-medium">
-                  Email Address
-                </Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-brand/60" />
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="Enter your email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    className="pl-10 h-12 border-brand/30 focus:border-brand"
-                    disabled={isLoading}
-                  />
-                </div>
-              </div>
-
-              {/* Password Field */}
-              <div className="space-y-2">
-                <Label htmlFor="password" className="text-brand font-medium">
-                  Password
-                </Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-brand/60" />
-                  <Input
-                    id="password"
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder="Enter your password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    className="pl-10 pr-10 h-12 border-brand/30 focus:border-brand"
-                    disabled={isLoading}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-brand/60 hover:text-brand"
-                    tabIndex={-1}
-                  >
-                    {showPassword ? (
-                      <EyeOff className="h-5 w-5" />
-                    ) : (
-                      <Eye className="h-5 w-5" />
-                    )}
-                  </button>
-                </div>
-              </div>
-
-              {/* Forgot Password Link */}
-              <div className="flex justify-end">
+            {/* Password Field */}
+            <div className="space-y-2">
+              <Label htmlFor="password" className="text-brand font-medium text-sm">
+                Password
+              </Label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-brand/60" />
+                <Input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="pl-10 pr-10 h-12 border-brand/30 focus:border-brand text-base"
+                  disabled={isLoading}
+                />
                 <button
                   type="button"
-                  className="text-sm text-brand hover:text-brand/80 font-medium"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-brand/60 hover:text-brand transition-colors"
+                  tabIndex={-1}
                 >
-                  Forgot password?
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
                 </button>
               </div>
+            </div>
 
-              {/* Submit Button */}
-              <Button
-                type="submit"
-                className="w-full h-12 bg-brand hover:bg-brand/90 text-white font-semibold text-base shadow-md"
-                disabled={isLoading}
+            {/* Forgot Password Link */}
+            <div className="flex justify-end">
+              <button
+                type="button"
+                className="text-sm text-brand hover:text-brand/80 font-medium transition-colors"
               >
-                {isLoading ? 'Signing in...' : 'Sign In'}
-              </Button>
+                Forgot password?
+              </button>
+            </div>
 
-              {/* Demo Credentials */}
-              <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                <p className="text-sm font-semibold text-blue-900 mb-2">Demo Credentials:</p>
-                <div className="space-y-1 text-xs text-blue-800">
-                  <p><strong>Admin:</strong> admin@1ummah.org</p>
-                  <p><strong>Staff:</strong> staff@1ummah.org</p>
-                  <p><strong>School:</strong> school@eqraah.edu.ng</p>
-                  <p className="mt-2 text-blue-700">Password: Any non-empty password</p>
+            {/* Submit Button */}
+            <Button
+              type="submit"
+              className="w-full h-13 bg-brand hover:bg-brand/90 text-white font-semibold text-base shadow-lg transition-all"
+              disabled={isLoading}
+            >
+              {isLoading ? 'Signing in...' : 'Sign In'}
+            </Button>
+
+            {/* Demo Credentials */}
+            <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <p className="text-sm font-semibold text-blue-900 mb-3 flex items-center gap-2">
+                <CheckCircle2 className="h-4 w-4" />
+                Demo Credentials
+              </p>
+              <div className="space-y-2 text-xs text-blue-800">
+                <div className="flex justify-between items-center py-1 border-b border-blue-200">
+                  <span className="font-medium">Admin:</span>
+                  <span>admin@1ummah.org</span>
                 </div>
+                <div className="flex justify-between items-center py-1 border-b border-blue-200">
+                  <span className="font-medium">Staff:</span>
+                  <span>staff@1ummah.org</span>
+                </div>
+                <div className="flex justify-between items-center py-1 border-b border-blue-200">
+                  <span className="font-medium">School:</span>
+                  <span>school@eqraah.edu.ng</span>
+                </div>
+                <p className="mt-3 text-blue-700 text-center font-medium">
+                  Password: Any non-empty password
+                </p>
               </div>
-            </form>
-          </CardContent>
-        </Card>
+            </div>
+          </form>
 
-        {/* Footer */}
-        <div className="mt-6 text-center text-sm text-gray-600">
-          <p>© 2026 1Ummah Islamic Organisation. All rights reserved.</p>
+          {/* Mobile Footer */}
+          <div className="lg:hidden text-center text-sm text-gray-600 pt-4">
+            © 2026 1Ummah Islamic Organisation
+          </div>
         </div>
       </div>
     </div>
