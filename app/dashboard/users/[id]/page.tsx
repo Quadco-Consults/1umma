@@ -20,11 +20,12 @@ import { UserStatus } from '@/lib/types';
 import { ArrowLeft, Save, Shield, Clock, Mail, Phone, Calendar } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, use } from 'react';
 
-export default function UserDetailPage({ params }: { params: { id: string } }) {
+export default function UserDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
-  const user = getUserById(params.id);
+  const { id } = use(params);
+  const user = getUserById(id);
 
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({

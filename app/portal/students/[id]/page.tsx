@@ -19,9 +19,11 @@ import {
   Info
 } from 'lucide-react';
 import Link from 'next/link';
+import { use } from 'react';
 
-export default function PortalStudentDetailPage({ params }: { params: { id: string } }) {
-  const student = students.find(s => s.id === params.id);
+export default function PortalStudentDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
+  const student = students.find(s => s.id === id);
 
   if (!student) {
     return (

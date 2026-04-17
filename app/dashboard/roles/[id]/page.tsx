@@ -21,11 +21,12 @@ import { RoleStatus, PermissionModule } from '@/lib/types';
 import { ArrowLeft, Save, Shield, Lock, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, use } from 'react';
 
-export default function RoleDetailPage({ params }: { params: { id: string } }) {
+export default function RoleDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
-  const role = getRoleById(params.id);
+  const { id } = use(params);
+  const role = getRoleById(id);
 
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({

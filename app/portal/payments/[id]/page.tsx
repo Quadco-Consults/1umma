@@ -21,9 +21,11 @@ import {
   MessageSquare
 } from 'lucide-react';
 import Link from 'next/link';
+import { use } from 'react';
 
-export default function PortalPaymentDetailPage({ params }: { params: { id: string } }) {
-  const payment = payments.find(p => p.id === params.id);
+export default function PortalPaymentDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
+  const payment = payments.find(p => p.id === id);
 
   if (!payment) {
     return (
