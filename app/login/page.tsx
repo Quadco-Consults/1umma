@@ -167,22 +167,28 @@ export default function LoginPage() {
             </Link>
           </div>
 
-          {/* Logo for mobile */}
-          <div className="lg:hidden flex justify-center">
-            <div className="relative h-20 w-20 bg-brand/10 rounded-full p-3">
-              <Image
-                src="/1Ummah-Web-logo.png"
-                alt="1Ummah Logo"
-                fill
-                className="object-contain p-2"
-                sizes="80px"
-                priority
-              />
+          {/* Logo */}
+          <div className="flex justify-center">
+            <div className="flex items-center gap-3">
+              <div className="relative h-16 w-16 bg-brand/10 rounded-full p-2">
+                <Image
+                  src="/1Ummah-Web-logo.png"
+                  alt="1Ummah Logo"
+                  fill
+                  className="object-contain p-1"
+                  sizes="64px"
+                  priority
+                />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-brand">1-Ummah</h2>
+                <p className="text-sm text-brand/80">Islamic Organisation</p>
+              </div>
             </div>
           </div>
 
           {/* Header */}
-          <div className="space-y-2">
+          <div className="space-y-2 text-center">
             <h1 className="text-4xl font-bold text-brand">Welcome Back</h1>
             <p className="text-gray-600">
               Sign in to access the SILP Management Platform
