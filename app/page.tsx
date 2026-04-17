@@ -177,10 +177,10 @@ export default function LandingPage() {
 
             {/* Right Image */}
             <div className="relative">
-              <div className="relative aspect-square rounded-2xl overflow-hidden shadow-2xl">
+              <div className="relative aspect-square rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
                 <Image
-                  src="/SILP-Graduation-150x150.png"
-                  alt="SILP Students"
+                  src="/1Ummah-NG22.png"
+                  alt="1Ummah SILP Students"
                   fill
                   className="object-cover"
                   sizes="(max-width: 1024px) 100vw, 50vw"
