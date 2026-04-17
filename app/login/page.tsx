@@ -62,6 +62,21 @@ export default function LoginPage() {
     <div className="min-h-screen flex">
       {/* Left Side - Branding & Design */}
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-brand via-brand/95 to-brand/90 relative overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0 opacity-20">
+          <Image
+            src="/1Ummah-NG22.png"
+            alt="1Ummah Students"
+            fill
+            className="object-cover"
+            sizes="50vw"
+            priority
+          />
+        </div>
+
+        {/* Overlay Gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-brand/90 via-brand/85 to-brand/90"></div>
+
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-20 left-10 w-96 h-96 bg-white rounded-full blur-3xl"></div>
