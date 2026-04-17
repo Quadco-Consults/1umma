@@ -3,7 +3,7 @@ import schoolsData from '@/mock-data/schools.json';
 import feesData from '@/mock-data/fees.json';
 import paymentsData from '@/mock-data/payments.json';
 import usersData from '@/mock-data/users.json';
-import type { Student, School, FeeRecord, PaymentRequest, AuthUser } from './types';
+import type { Student, School, FeeRecord, PaymentRequest, AuthUser, StudentReport } from './types';
 
 export const students = studentsData as Student[];
 export const schools = schoolsData as School[];
@@ -148,4 +148,97 @@ export function getGraduatedStudents() {
       higherInstitution: 'Pending',
       sponsorshipStatus: 'Pending' as 'Yes' | 'No' | 'Pending',
     }));
+}
+
+// Mock student reports data
+const studentReports: StudentReport[] = [
+  {
+    id: 'REP-001',
+    studentId: 'STU-024',
+    term: 'Term 1',
+    year: '2024/2025',
+    class: 'JSS1',
+    subjects: [
+      { subject: 'Mathematics', score: 78, grade: 'B', remark: 'Good' },
+      { subject: 'English Language', score: 82, grade: 'A', remark: 'Excellent' },
+      { subject: 'Science', score: 75, grade: 'B', remark: 'Good' },
+      { subject: 'Social Studies', score: 80, grade: 'A', remark: 'Very Good' },
+      { subject: 'Hausa Language', score: 70, grade: 'B', remark: 'Good' },
+      { subject: 'Physical Education', score: 85, grade: 'A', remark: 'Excellent' },
+      { subject: 'Islamic Studies', score: 88, grade: 'A', remark: 'Excellent' },
+      { subject: 'Computer Studies', score: 76, grade: 'B', remark: 'Good' },
+    ],
+    totalScore: 634,
+    averageScore: 79.25,
+    position: 5,
+    totalStudents: 45,
+    attendance: { present: 88, absent: 2, total: 90 },
+    teacherComment: 'Jamilu is a dedicated student who shows consistent effort in all subjects. Keep up the good work!',
+    principalComment: 'Excellent performance. Continue to strive for excellence.',
+    nextTermBegins: '2025-04-08',
+  },
+  {
+    id: 'REP-002',
+    studentId: 'STU-024',
+    term: 'Term 2',
+    year: '2024/2025',
+    class: 'JSS1',
+    subjects: [
+      { subject: 'Mathematics', score: 85, grade: 'A', remark: 'Excellent' },
+      { subject: 'English Language', score: 87, grade: 'A', remark: 'Excellent' },
+      { subject: 'Science', score: 82, grade: 'A', remark: 'Very Good' },
+      { subject: 'Social Studies', score: 84, grade: 'A', remark: 'Very Good' },
+      { subject: 'Hausa Language', score: 75, grade: 'B', remark: 'Good' },
+      { subject: 'Physical Education', score: 90, grade: 'A', remark: 'Outstanding' },
+      { subject: 'Islamic Studies', score: 92, grade: 'A', remark: 'Outstanding' },
+      { subject: 'Computer Studies', score: 80, grade: 'A', remark: 'Very Good' },
+    ],
+    totalScore: 675,
+    averageScore: 84.38,
+    position: 3,
+    totalStudents: 45,
+    attendance: { present: 92, absent: 1, total: 93 },
+    teacherComment: 'Outstanding improvement this term! Jamilu has shown remarkable dedication and progress.',
+    principalComment: 'Keep up this excellent performance. Well done!',
+    nextTermBegins: '2025-09-10',
+  },
+  {
+    id: 'REP-003',
+    studentId: 'STU-024',
+    term: 'Term 1',
+    year: '2023/2024',
+    class: 'Primary 6',
+    subjects: [
+      { subject: 'Mathematics', score: 72, grade: 'B', remark: 'Good' },
+      { subject: 'English Language', score: 76, grade: 'B', remark: 'Good' },
+      { subject: 'Science', score: 70, grade: 'B', remark: 'Good' },
+      { subject: 'Social Studies', score: 74, grade: 'B', remark: 'Good' },
+      { subject: 'Hausa Language', score: 68, grade: 'C', remark: 'Fair' },
+      { subject: 'Physical Education', score: 80, grade: 'A', remark: 'Very Good' },
+      { subject: 'Islamic Studies', score: 82, grade: 'A', remark: 'Very Good' },
+    ],
+    totalScore: 522,
+    averageScore: 74.57,
+    position: 8,
+    totalStudents: 40,
+    attendance: { present: 85, absent: 5, total: 90 },
+    teacherComment: 'Good effort. Needs to improve in Hausa Language.',
+    principalComment: 'Satisfactory performance. Keep working hard.',
+    nextTermBegins: '2024-01-10',
+  },
+];
+
+// Get reports for a student
+export function getReportsByStudent(studentId: string): StudentReport[] {
+  return studentReports
+    .filter((r) => r.studentId === studentId)
+    .sort((a, b) => {
+      // Sort by year first (descending)
+      const yearCompare = b.year.localeCompare(a.year);
+      if (yearCompare !== 0) return yearCompare;
+
+      // Then by term (descending - Term 3, Term 2, Term 1)
+      const termOrder = { 'Term 3': 3, 'Term 2': 2, 'Term 1': 1 };
+      return (termOrder[b.term as keyof typeof termOrder] || 0) - (termOrder[a.term as keyof typeof termOrder] || 0);
+    });
 }

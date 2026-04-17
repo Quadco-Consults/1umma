@@ -43,6 +43,35 @@ export interface Student {
   photo: string | null;
 }
 
+// Academic Report types
+export interface SubjectGrade {
+  subject: string;
+  score: number;
+  grade: string;
+  remark: string;
+}
+
+export interface StudentReport {
+  id: string;
+  studentId: string;
+  term: string;
+  year: string;
+  class: string;
+  subjects: SubjectGrade[];
+  totalScore: number;
+  averageScore: number;
+  position: number;
+  totalStudents: number;
+  attendance: {
+    present: number;
+    absent: number;
+    total: number;
+  };
+  teacherComment: string;
+  principalComment: string;
+  nextTermBegins: string;
+}
+
 // School types
 export interface FeeStructure {
   classLevel: string;

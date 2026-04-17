@@ -10,8 +10,8 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { getStudentById, getFeesByStudent, formatDate, formatCurrency } from '@/lib/mock-data';
-import { ArrowLeft, Edit, GraduationCap, Mail, Phone, MapPin, Calendar, User, Upload, FileText, Download, Trash2, Eye } from 'lucide-react';
+import { getStudentById, getFeesByStudent, getReportsByStudent, formatDate, formatCurrency } from '@/lib/mock-data';
+import { ArrowLeft, Edit, GraduationCap, Mail, Phone, MapPin, Calendar, User, Upload, FileText, Download, Trash2, Eye, BookOpen, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
@@ -33,6 +33,7 @@ export default function StudentProfilePage() {
   const studentId = params.id as string;
   const student = getStudentById(studentId);
   const feeHistory = getFeesByStudent(studentId);
+  const academicReports = getReportsByStudent(studentId);
   const [showGraduateModal, setShowGraduateModal] = useState(false);
   const [documents, setDocuments] = useState<Document[]>([
     {
@@ -204,6 +205,7 @@ export default function StudentProfilePage() {
         <Tabs defaultValue="overview" className="space-y-6">
           <TabsList>
             <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="reports">Academic Reports</TabsTrigger>
             <TabsTrigger value="fees">Fee History</TabsTrigger>
             <TabsTrigger value="school">School History</TabsTrigger>
             <TabsTrigger value="documents">Documents</TabsTrigger>
@@ -282,6 +284,144 @@ export default function StudentProfilePage() {
                 </CardContent>
               </Card>
             </div>
+          </TabsContent>
+
+          {/* Academic Reports Tab */}
+          <TabsContent value="reports" className="space-y-6">
+            {academicReports.length > 0 ? (
+              academicReports.map((report) => (
+                <Card key={report.id} className="border-brand/20 shadow-md">
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="flex items-center gap-2">
+                        <BookOpen className="h-5 w-5 text-brand" />
+                        {report.term}, {report.year} - {report.class}
+                      </CardTitle>
+                      <Button variant="outline" size="sm" className="gap-2">
+                        <Download className="h-4 w-4" />
+                        Download Report
+                      </Button>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    {/* Summary Stats */}
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                      <div className="p-4 bg-brand/5 rounded-lg border border-brand/20">
+                        <div className="flex items-center gap-2 mb-1">
+                          <TrendingUp className="h-4 w-4 text-brand" />
+                          <label className="text-sm text-muted-foreground">Average Score</label>
+                        </div>
+                        <p className="text-2xl font-bold text-brand">{report.averageScore.toFixed(2)}%</p>
+                      </div>
+                      <div className="p-4 bg-amber-50 rounded-lg border border-amber-200">
+                        <label className="text-sm text-muted-foreground block mb-1">Position</label>
+                        <p className="text-2xl font-bold text-amber-900">
+                          {report.position}/{report.totalStudents}
+                        </p>
+                      </div>
+                      <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                        <label className="text-sm text-muted-foreground block mb-1">Attendance</label>
+                        <p className="text-2xl font-bold text-green-900">
+                          {report.attendance.present}/{report.attendance.total}
+                        </p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {((report.attendance.present / report.attendance.total) * 100).toFixed(1)}%
+                        </p>
+                      </div>
+                      <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                        <label className="text-sm text-muted-foreground block mb-1">Total Score</label>
+                        <p className="text-2xl font-bold text-blue-900">{report.totalScore}</p>
+                      </div>
+                    </div>
+
+                    {/* Subjects Table */}
+                    <div>
+                      <h4 className="font-semibold mb-3">Subject Performance</h4>
+                      <div className="overflow-x-auto">
+                        <table className="w-full">
+                          <thead>
+                            <tr className="border-b border-brand/20 bg-brand/5">
+                              <th className="text-left py-3 px-4 font-semibold">Subject</th>
+                              <th className="text-center py-3 px-4 font-semibold">Score</th>
+                              <th className="text-center py-3 px-4 font-semibold">Grade</th>
+                              <th className="text-left py-3 px-4 font-semibold">Remark</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {report.subjects.map((subject, index) => (
+                              <tr key={index} className="border-b">
+                                <td className="py-3 px-4 font-medium">{subject.subject}</td>
+                                <td className="py-3 px-4 text-center">
+                                  <span className={`font-bold ${
+                                    subject.score >= 80 ? 'text-green-600' :
+                                    subject.score >= 70 ? 'text-blue-600' :
+                                    subject.score >= 60 ? 'text-amber-600' :
+                                    'text-red-600'
+                                  }`}>
+                                    {subject.score}
+                                  </span>
+                                </td>
+                                <td className="py-3 px-4 text-center">
+                                  <Badge variant={
+                                    subject.grade === 'A' ? 'default' :
+                                    subject.grade === 'B' ? 'outline' :
+                                    'secondary'
+                                  } className={
+                                    subject.grade === 'A' ? 'bg-green-100 text-green-800 border-green-300' :
+                                    subject.grade === 'B' ? 'bg-blue-100 text-blue-800 border-blue-300' :
+                                    'bg-amber-100 text-amber-800'
+                                  }>
+                                    {subject.grade}
+                                  </Badge>
+                                </td>
+                                <td className="py-3 px-4">{subject.remark}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+
+                    {/* Comments */}
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="p-4 bg-muted/50 rounded-lg">
+                        <h4 className="font-semibold mb-2 flex items-center gap-2">
+                          <User className="h-4 w-4 text-brand" />
+                          Class Teacher's Comment
+                        </h4>
+                        <p className="text-sm">{report.teacherComment}</p>
+                      </div>
+                      <div className="p-4 bg-brand/5 rounded-lg border border-brand/20">
+                        <h4 className="font-semibold mb-2 flex items-center gap-2">
+                          <GraduationCap className="h-4 w-4 text-brand" />
+                          Principal's Comment
+                        </h4>
+                        <p className="text-sm">{report.principalComment}</p>
+                      </div>
+                    </div>
+
+                    {/* Next Term */}
+                    <div className="flex items-center gap-2 p-3 bg-amber-50 border border-amber-200 rounded-lg">
+                      <Calendar className="h-4 w-4 text-amber-600" />
+                      <p className="text-sm">
+                        <span className="font-medium text-amber-900">Next Term Begins:</span>{' '}
+                        <span className="text-amber-700">{formatDate(report.nextTermBegins)}</span>
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))
+            ) : (
+              <Card>
+                <CardContent className="text-center py-12">
+                  <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
+                  <p className="text-muted-foreground">No academic reports available yet</p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Reports will appear here once uploaded by the school
+                  </p>
+                </CardContent>
+              </Card>
+            )}
           </TabsContent>
 
           {/* Fee History Tab */}
