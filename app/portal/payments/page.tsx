@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { StatusBadge } from '@/components/ui-custom/StatusBadge';
 import { getPaymentsBySchool, formatCurrency, formatDate } from '@/lib/mock-data';
-import { Search, FileText, Plus, DollarSign, Clock, CheckCircle2, XCircle, AlertCircle } from 'lucide-react';
+import { Search, FileText, Plus, DollarSign, Clock, CheckCircle2, XCircle, AlertCircle, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 import type { PaymentStatus } from '@/lib/types';
@@ -181,53 +181,58 @@ export default function PortalPaymentsPage() {
                 {filteredPayments
                   .sort((a, b) => new Date(b.submittedDate).getTime() - new Date(a.submittedDate).getTime())
                   .map((payment) => (
-                    <div
+                    <Link
                       key={payment.id}
-                      className="flex flex-col md:flex-row md:items-center justify-between p-4 rounded-lg border border-brand/10 hover:bg-brand/5 transition-colors"
+                      href={`/portal/payments/${payment.id}`}
                     >
-                      <div className="flex items-start gap-4 flex-1">
-                        {/* Status Icon */}
-                        <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
-                          {getStatusIcon(payment.status)}
-                        </div>
-
-                        {/* Payment Info */}
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 mb-1">
-                            <h3 className="font-semibold text-brand">{payment.id}</h3>
-                            <StatusBadge status={payment.status} />
+                      <div className="flex flex-col md:flex-row md:items-center justify-between p-4 rounded-lg border border-brand/10 hover:bg-brand/5 hover:border-brand/30 transition-all cursor-pointer group">
+                        <div className="flex items-start gap-4 flex-1">
+                          {/* Status Icon */}
+                          <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center flex-shrink-0 group-hover:bg-brand/10 transition-colors">
+                            {getStatusIcon(payment.status)}
                           </div>
-                          <p className="text-sm text-muted-foreground">
-                            {payment.term}, {payment.year} · {payment.studentCount} students
-                          </p>
-                          <p className="text-xs text-muted-foreground mt-1">
-                            Submitted: {formatDate(payment.submittedDate)}
-                          </p>
-                          {payment.paymentDate && (
-                            <p className="text-xs text-green-600 mt-1">
-                              Paid: {formatDate(payment.paymentDate)}
+
+                          {/* Payment Info */}
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 mb-1">
+                              <h3 className="font-semibold text-brand group-hover:underline">{payment.id}</h3>
+                              <StatusBadge status={payment.status} />
+                            </div>
+                            <p className="text-sm text-muted-foreground">
+                              {payment.term}, {payment.year} · {payment.studentCount} students
                             </p>
-                          )}
+                            <p className="text-xs text-muted-foreground mt-1">
+                              Submitted: {formatDate(payment.submittedDate)}
+                            </p>
+                            {payment.paymentDate && (
+                              <p className="text-xs text-green-600 mt-1">
+                                Paid: {formatDate(payment.paymentDate)}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Amount */}
+                        <div className="mt-4 md:mt-0 md:text-right flex md:flex-col items-center gap-2">
+                          <div className="flex-1 text-left md:text-right">
+                            <p className="text-2xl font-bold text-brand">
+                              {formatCurrency(payment.amount)}
+                            </p>
+                            {payment.paymentMethod && (
+                              <p className="text-xs text-muted-foreground mt-1">
+                                {payment.paymentMethod}
+                              </p>
+                            )}
+                            {payment.paymentReference && (
+                              <p className="text-xs text-muted-foreground">
+                                Ref: {payment.paymentReference}
+                              </p>
+                            )}
+                          </div>
+                          <ChevronRight className="h-5 w-5 text-muted-foreground group-hover:text-brand transition-colors" />
                         </div>
                       </div>
-
-                      {/* Amount */}
-                      <div className="mt-4 md:mt-0 md:text-right">
-                        <p className="text-2xl font-bold text-brand">
-                          {formatCurrency(payment.amount)}
-                        </p>
-                        {payment.paymentMethod && (
-                          <p className="text-xs text-muted-foreground mt-1">
-                            {payment.paymentMethod}
-                          </p>
-                        )}
-                        {payment.paymentReference && (
-                          <p className="text-xs text-muted-foreground">
-                            Ref: {payment.paymentReference}
-                          </p>
-                        )}
-                      </div>
-                    </div>
+                    </Link>
                   ))}
               </div>
             ) : (
